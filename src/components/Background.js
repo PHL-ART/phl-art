@@ -14,8 +14,7 @@ import {
 } from "../helpers/CameraRotation.js";
 import CameraOrientationState from "../helpers/CameraState.js";
 import { PALLETES } from "../palletes";
-
-let pallete = PALLETES.DEFAULT.map((color) => new THREE.Color(color));
+import { PalleteController } from "../helpers/PalleteController";
 
 export default class Background {
   constructor() {
@@ -71,6 +70,8 @@ export default class Background {
     this.composer.addPass(this.renderPass);
     const filmPass = new FilmPass(0.15, 0, 0, 0);
     this.composer.addPass(filmPass);
+
+    this.pallete = PalleteController();
 
     this.isPlaying = true;
 
