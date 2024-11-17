@@ -33,6 +33,6 @@ docker run -p 3000:80 -d phl-art
 
 ### TODO
 - [ ] Add Logo SVG Animation with GSAP
-- [ ] Add more Palletes
 - [ ] Add Pallete algorythm that will depends on current client time and season
 - [ ] Add gradient radnomize button
+- [x] Add more Palletes
