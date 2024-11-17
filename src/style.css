@@ -60,13 +60,14 @@ h1 {
     position: absolute;
     justify-content: center;
     flex-direction: column;
+    margin-top: 4rem;
 }
 
-.logo, .shuffle {
+.logo {
     transition: transform 0.25s ease-in-out;
 }
 
-.logo:hover, .shuffle:hover {
+.logo:hover {
     filter: drop-shadow(0 0 2em #e9ccccaa);
     cursor: pointer;
     transform: scale(1.05);
@@ -76,9 +77,14 @@ h1 {
     box-sizing: border-box;
     max-width: 48px;
     max-height: 48px;
+    margin-top: 4rem;
 }
 
-.shuffle img {
+.shuffle:hover {
+    cursor: pointer;
+}
+
+.shuffle svg {
     width: 100%;
     height: 100%;
 }

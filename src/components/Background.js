@@ -172,7 +172,6 @@ export default class Background {
 
   changePallete() {
     this.pallete = PalleteController();
-    console.log(this.pallete);
     this.material.uniforms.uColor.value = this.pallete;
     this.render();
   }
