@@ -1,5 +1,11 @@
-import Background from "./components/Background.js";
-import "./style.css";
+import Background from "@components/Background.js";
+import "@/style.css";
+import { RandomButton } from "./components/RandomButton";
 
+const background = new Background();
+const shuffleButtonSlector = ".shuffle";
+RandomButton(shuffleButtonSlector);
 
-new Background();
+document.querySelector(shuffleButtonSlector).addEventListener("click", () => {
+  background.changePallete();
+});

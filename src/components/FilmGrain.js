@@ -1,4 +1,4 @@
-import grainShader from '../shaders/grain.glsl';
+import grainShader from '@shaders/grain.glsl';
 
 export default class GrainShader {
   constructor(THREE) {

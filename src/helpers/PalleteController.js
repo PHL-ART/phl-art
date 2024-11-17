@@ -1,14 +1,13 @@
 import * as THREE from "three";
-import { PALLETES } from "../palletes";
+import { PALLETES } from "@constants/palletes.js";
 
 export const PalleteController = () => {
-    const palleteKeys = Object.keys(PALLETES);
-    const randomInt = Math.floor(Math.random() * (Math.floor(palleteKeys.length) + 1));
+  const palleteKeys = Object.keys(PALLETES);
+  const randomInt = Math.floor(
+    Math.random() * (Math.floor(palleteKeys.length))
+  );
 
-    const resultPallete = PALLETES[palleteKeys[randomInt]];
-    console.log(resultPallete);
+  const resultPallete = PALLETES[palleteKeys[randomInt]].map((color) => new THREE.Color(color));
 
-    return resultPallete;
-}
-
-let pallete = PALLETES.DEFAULT.map((color) => new THREE.Color(color));
+  return resultPallete;
+};

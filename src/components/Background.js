@@ -6,15 +6,14 @@ import {
 } from "three/examples/jsm/postprocessing/FilmPass.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-import fragment from "../shaders/fragment.glsl";
-import vertex from "../shaders/vertex.glsl";
+import fragment from "@shaders/fragment.glsl";
+import vertex from "@shaders/vertex.glsl";
 import {
   handleCameraRotation,
   handleMouseMovement,
-} from "../helpers/CameraRotation.js";
-import CameraOrientationState from "../helpers/CameraState.js";
-import { PALLETES } from "../palletes";
-import { PalleteController } from "../helpers/PalleteController";
+} from "@helpers/CameraRotation.js";
+import CameraOrientationState from "@helpers/CameraState.js";
+import { PalleteController } from "@helpers/PalleteController";
 
 export default class Background {
   constructor() {
@@ -82,12 +81,6 @@ export default class Background {
     this.setupMouseMove();
   }
 
-  settings() {
-    this.settings = {
-      progress: 0,
-    };
-  }
-
   setupResize() {
     window.addEventListener("resize", this.resize.bind(this));
   }
@@ -143,7 +136,7 @@ export default class Background {
       uniforms: {
         time: { value: 0 },
         resolution: { value: new THREE.Vector4() },
-        uColor: { value: pallete },
+        uColor: { value: this.pallete },
       },
       fragmentShader: fragment,
       vertexShader: vertex,
@@ -156,25 +149,32 @@ export default class Background {
     this.scene.add(this.mesh);
   }
 
-  addText() {
-    this.material = new THREE.ShaderMaterial({
-      extensions: {
-        derivatives: "#extension GL_OES_standard_derivatives : enable",
-      },
-      side: THREE.DoubleSide,
-      uniforms: {
-        time: { value: 0 },
-        resolution: { value: new THREE.Vector4() },
-        uColor: { value: pallete },
-      },
-      fragmentShader: fragment,
-      vertexShader: vertex,
-      // wireframe: true
-    });
+  // addText() {
+  //   this.material = new THREE.ShaderMaterial({
+  //     extensions: {
+  //       derivatives: "#extension GL_OES_standard_derivatives : enable",
+  //     },
+  //     side: THREE.DoubleSide,
+  //     uniforms: {
+  //       time: { value: 0 },
+  //       resolution: { value: new THREE.Vector4() },
+  //       uColor: { value: pallete },
+  //     },
+  //     fragmentShader: fragment,
+  //     vertexShader: vertex,
+  //     // wireframe: true
+  //   });
 
-    this.geometry = new THREE.PlaneGeometry(1, 1, 100, 100);
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.scene.add(this.mesh);
+  //   this.geometry = new THREE.PlaneGeometry(1, 1, 100, 100);
+  //   this.mesh = new THREE.Mesh(this.geometry, this.material);
+  //   this.scene.add(this.mesh);
+  // }
+
+  changePallete() {
+    this.pallete = PalleteController();
+    console.log(this.pallete);
+    this.material.uniforms.uColor.value = this.pallete;
+    this.render();
   }
 
   addLight() {
@@ -199,7 +199,7 @@ export default class Background {
 
   render() {
     if (!this.isPlaying) return;
-    this.time += 0.0002;
+    this.time += 0.0001;
     this.material.uniforms.time.value = this.time;
     requestAnimationFrame(this.render.bind(this));
     handleCameraRotation(this.camera, this.cameraOrientationState);
