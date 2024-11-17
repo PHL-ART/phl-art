@@ -7,8 +7,9 @@ export default defineConfig({
     port: 3000,
   },
   build: {
-    outDir: "./dist",
+    outDir: "/dist",
     assetsDir: './assets',
+    emptyOutDir: true,
     sourcemap: true,
   },
   plugins: [glsl()],

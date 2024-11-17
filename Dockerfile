@@ -1,25 +1,13 @@
-FROM node:18.8-alpine as base
+FROM node:lts-alpine as builder
 
-FROM base as builder
+WORKDIR /app
+COPY package.json .
 
-WORKDIR /home/node/app
-COPY package*.json ./
+RUN npm install --legacy-peer-deps
 
 COPY . .
-RUN npm install
-RUN npm build
+RUN npm run build
 
-FROM base as runtime
+FROM nginx:alpine
 
-ENV NODE_ENV=production
-
-WORKDIR /home/node/app
-COPY package*.json  ./
-
-RUN npm install
-COPY --from=builder /home/node/app/dist ./dist
-COPY --from=builder /home/node/app/build ./build
-
-EXPOSE 3000
-
-CMD ["node", "dist/main.js"]
+COPY --from=builder /app/dist /usr/share/nginx/html
