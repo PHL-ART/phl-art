@@ -1,11 +1,9 @@
-version: "3.9"
-
 services:
-  phl-art:
+  ph1l74-art:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: phl-art
+    container_name: ph1l74-art
     restart: unless-stopped
     environment:
       - NODE_ENV=production
@@ -13,15 +11,21 @@ services:
       - "80"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.phl-art.rule=Host(`${PHL_ART_HOST:-phl-art.localhost}`)"
-      - "traefik.http.routers.phl-art.entrypoints=websecure"
-      - "traefik.http.routers.phl-art.tls=true"
-      - "traefik.http.services.phl-art.loadbalancer.server.port=80"
-      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.ph1l74-art.rule=Host(`art.ph1l74.com`)"
+      - "traefik.http.routers.ph1l74-art.entrypoints=websecure"
+      - "traefik.http.routers.ph1l74-art.tls=true"
+      - "traefik.http.routers.ph1l74-art.tls.certresolver=letsencrypt"
+      - "traefik.http.services.ph1l74-art.loadbalancer.server.port=80"
+      - "traefik.docker.network=ph1l74-network"
+      # HTTP -> HTTPS redirect to pass ACME http-01 and redirect users
+      - "traefik.http.routers.ph1l74-art-redirect.rule=Host(`art.ph1l74.com`)"
+      - "traefik.http.routers.ph1l74-art-redirect.entrypoints=web"
+      - "traefik.http.routers.ph1l74-art-redirect.middlewares=ph1l74-https-redirect"
+      - "traefik.http.middlewares.ph1l74-https-redirect.redirectscheme.scheme=https"
     networks:
-      - traefik
+      - ph1l74-network
 
 networks:
-  traefik:
+  ph1l74-network:
     external: true
 
