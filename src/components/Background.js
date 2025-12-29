@@ -73,10 +73,12 @@ export default class Background {
     this.pallete = PalleteController();
 
     this.isPlaying = true;
+    this.animationFrameId = null;
 
     this.addObject();
     this.resize();
-    this.render();
+    this.render = this.render.bind(this);
+    this.startRenderLoop();
     this.setupResize();
     this.setupMouseMove();
   }
@@ -173,7 +175,12 @@ export default class Background {
   changePallete() {
     this.pallete = PalleteController();
     this.material.uniforms.uColor.value = this.pallete;
-    this.render();
+  }
+
+  startRenderLoop() {
+    if (this.animationFrameId) return;
+    this.isPlaying = true;
+    this.animationFrameId = requestAnimationFrame(this.render);
   }
 
   addLight() {
@@ -187,12 +194,15 @@ export default class Background {
 
   stop() {
     this.isPlaying = false;
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
   }
 
   play() {
     if (!this.isPlaying) {
-      this.isPlaying = true;
-      this.render();
+      this.startRenderLoop();
     }
   }
 
@@ -200,9 +210,9 @@ export default class Background {
     if (!this.isPlaying) return;
     this.time += 0.0001;
     this.material.uniforms.time.value = this.time;
-    requestAnimationFrame(this.render.bind(this));
     handleCameraRotation(this.camera, this.cameraOrientationState);
     // this.renderer.render(this.scene, this.camera);
     this.composer.render();
+    this.animationFrameId = requestAnimationFrame(this.render);
   }
 }

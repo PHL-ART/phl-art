@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  phl-art:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: phl-art
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phl-art.rule=Host(`${PHL_ART_HOST:-phl-art.localhost}`)"
+      - "traefik.http.routers.phl-art.entrypoints=websecure"
+      - "traefik.http.routers.phl-art.tls=true"
+      - "traefik.http.services.phl-art.loadbalancer.server.port=80"
+      - "traefik.docker.network=traefik"
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+
